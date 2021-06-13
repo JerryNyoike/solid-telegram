@@ -48,8 +48,20 @@ class DQNAgent(object):
         pass
 
 
-    def set_reward(self, player, crash):
-        pass
+    def set_reward(self, player, hit, lost):
+        self.reward = 0
+        if hit:
+            self.reward = 10
+            return self.reward
+        else:
+            self.reward = -10
+            return self.reward
+
+        if lost:
+            self.reward = -5
+
+        return self.reward
+        
 
 
     def remember(self, state, action, reward, next_state, done):
