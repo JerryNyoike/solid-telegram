@@ -21,6 +21,9 @@ class Alien:
     def collision(self, rocket):
         return rocket.x < self.x + self.size and rocket.x > self.x - self.size and rocket.y < self.y + self.size and rocket.y > self.y - self.size
 
+    def x_cordinates(self):
+        return self.x, self.x + size
+
 
 class AlienGenerator:
     margin = 30
