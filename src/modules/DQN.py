@@ -44,8 +44,41 @@ class DQNAgent(object):
         return model
 
 
-    def get_state(self, game, player, enemy):
-        pass
+    def get_state(self, game, spaceship, enemies):
+        ''' The state we store is whether:
+            i) there is an enemy in front, to the left of or to the right of the agent
+            ii) if the agent can move to the left and to the right.
+            iii) if there are enemies within 5 points on the cordinates to the agents position.'''
+        def enemy_in_position(postion, enemy):
+            enemy_x , enemy_max_x = enemy.coords()
+            if position == "front":
+                return spaceship.x <= enemy_max_x and spaceship.x >= enemy_x
+            elif position == "left":
+                return spaceship.x > enemy_x and spaceship.x > enemy_max_x
+            else:
+                return spaceship.x < enemy_x and spaceship.x < enemy_max_x
+
+        enemy_left = partial(enemy_in_position, "left")
+
+        enemy_right = partial(enemy_in_position, "right")
+
+        enemy_top = partial(enemy_in_position, "front")
+
+        def move_in_direction(direction):
+            ''' Checks if the agent has reached the left border of the screen. '''
+            if direction == "left":
+                return spaceship.x > 20
+            return spaceship.x < width - 20
+
+        state = [
+                move_in_direction("left"),
+                move_in_direction("right"),
+                len(list(filter(enemy_left, enemies))) != 0,
+                len(list(filter(enemy_right, enemies))) != 0,
+                len(list(filter(enemy_front, enemies))) != 0,
+                ]
+
+        return state
 
 
     def set_reward(self, player, hit, lost):
