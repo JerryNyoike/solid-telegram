@@ -4,7 +4,7 @@ from keras.layers.core import Dense, Dropout
 import random
 import numpy as np
 import pandas as pd
-from operator import add
+from operator import lt, gt, le, ge
 import collections
 
 
@@ -52,11 +52,13 @@ class DQNAgent(object):
         def enemy_in_position(postion, enemy):
             enemy_x , enemy_max_x = enemy.coords()
             if position == "front":
-                return spaceship.x <= enemy_max_x and spaceship.x >= enemy_x
+                op_1, op_2 = le, ge
             elif position == "left":
-                return spaceship.x > enemy_x and spaceship.x > enemy_max_x
+                op_1, op_2 = gt, gt
             else:
-                return spaceship.x < enemy_x and spaceship.x < enemy_max_x
+                op_1, op_2 = lt, lt
+
+            return op_1(spaceship.x, enemy_x) and op_2(spaceship.x, enemy_max_x)
 
         enemy_left = partial(enemy_in_position, "left")
 
