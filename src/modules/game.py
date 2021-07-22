@@ -3,6 +3,7 @@ import pygame
 from .spaceship import Spaceship
 from .enemy import AlienGenerator
 from .rocket import Rocket
+# from .DQN import DQNAgent
 
 
 class Game:
@@ -40,7 +41,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not self.lost:
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not self.lost:
                     self.rockets.append(Rocket(self, ship.x, ship.y))
 
             pygame.display.flip()
@@ -50,11 +51,10 @@ class Game:
             # Draw the aliens
             for alien in self.aliens:
                 alien.draw()
+                if (alien.y - 32) > height:
+                    self.lost = True
+                    self.display_text("Mission FAILED!")
                 alien.check_collision(self)
-
-            if alien.y >= height:
-                self.lost = True
-                self.display_text("Mission FAILED!")
 
             # Draw rockets
             for rocket in self.rockets:
