@@ -12,11 +12,15 @@ class Alien:
         pygame.draw.rect(self.game.screen, (81, 43, 88), pygame.Rect(self.x, self.y, self.size, self.size))
         self.y += 0.05
 
-    def check_collision(self, game):
+    def check_collision(self, game, agent=None):
         for rocket in game.rockets:
+            collided = self.collision(rocket)
             if self.collision(rocket):
                 game.rockets.remove(rocket)
                 game.aliens.remove(self)
+            
+                if agent != None:
+                    reward = agent.set_reward(game.ship, collided, game.lost)
 
     def collision(self, rocket):
         return rocket.x < self.x + self.size and rocket.x > self.x - self.size and rocket.y < self.y + self.size and rocket.y > self.y - self.size
