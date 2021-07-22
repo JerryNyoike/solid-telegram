@@ -80,10 +80,17 @@ class DQNAgent(object):
                 len(list(filter(enemy_front, enemies))) != 0,
                 ]
 
-        return state
+        # convert True and False values to 0 and 1 respectively
+        for i in range(len(state)):
+            if state[i]:
+                state[i] = 1
+            else:
+                state[i] = 0
+
+        return np.asarray(state)
 
 
-    def set_reward(self, player, hit, lost):
+    def set_reward(self, player, lost):
         self.reward = 0
         if hit:
             self.reward = 10
