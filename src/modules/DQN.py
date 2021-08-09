@@ -107,12 +107,27 @@ class DQNAgent(object):
 
 
     def remember(self, state, action, reward, next_state, done):
-        pass
+        self.memory.append((state, action, reward, next_state, done))
 
 
     def replay_new(self, memory, batch_size):
-        pass
+        if len(memory) > batch_size:
+            minibatch = random.sample(memory, batchsize)
+        else:
+            minibatch = memory
+            for state, action, next_state, done in minibatch:
+                target = reward
+                if not done:
+                    target = reward + self.gamma * np.amax(self.model.predict(np.array([state]))[0])
+                target_f = self.model.predict(np.array[state])
+                target[0][np.argmax(action)] = target
+                self.model.fit(np.array([state]), target, epochs=1, verbose=0)
 
 
     def train_short_memory(self, state, action, reward, next_state, done):
-        pass
+        target = reward
+        if not done:
+            target = reward + self.gamma * np.amax(self.model.predict(next_state.reshape((1, 5)))[0])
+        target_f = self.model.predict(state.reshape((1, 11)))
+        target_f[0][np.argmax(action)] = target
+        self.model.sit(state.reshape((1, 11)), target, epochs=1, verbose=0)
